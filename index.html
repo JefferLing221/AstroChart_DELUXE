@@ -100,6 +100,15 @@ function generate ()
 {
     //hideclass('button')
 
+    if (ismobile())
+    {
+        document.getElementById("ratingDisplay").style.fontFamily = "Thicccboi"
+    }
+    else
+    {
+        document.getElementById("ratingDisplay").style.fontFamily = "monospace"
+    }
+
     //date
     n =  new Date();
     y = n.getFullYear();
@@ -309,11 +318,6 @@ function generate ()
                 text.innerHTML = data[counter][6]
                 text.style.transform = "translate(103px, 43px)"
                 text.style.fontSize = "26px"
-                if (ismobile())
-                {
-                    alert("asdsadsad")
-                    text.style.fontFamily = "Thicccboi"
-                }
                 totalrating = totalrating + parseInt(data[counter][6])
 
                 newChart.appendChild(text)
