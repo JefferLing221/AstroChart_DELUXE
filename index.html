@@ -698,13 +698,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 function ismobile() {
-  let check = false;
-  if (typeof screen.orientation !== 'undefined')
-  {
-    check=true
-  }
-  return check;
-};
+    const toMatch = [
+        /Android/i,
+        /webOS/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+    ];
+    
+    return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+    });
+}
 
 //god why does CORS have to interfere again with the saving thing
 
