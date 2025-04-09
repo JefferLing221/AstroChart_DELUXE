@@ -1,0 +1,704 @@
+<html>
+<head>
+<title>AstroChart</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+
+<div class="centered" id="login">
+
+    <h1>AstroChart</h1>
+    <input type="text" id="sheets_link" placeholder="Your Google Sheets Link / ID">
+    <br>
+    <select name="chartType" id="chartType">
+      <option value="Best 50 Rating">Best 50</option>
+      <option value="DX Rating">DX Rating</option>
+    </select>
+    <br>
+    <div id="markers">
+        <div id="marker_text">
+            <span class="checkbox_text">Include FC/AP Markers</span>
+            <span class="checkbox_text">Include DX☆ &nbsp Markers</span>
+        </div>
+        <div id="marker_checkbox">
+            <div id="FCAPToggle" class="checkbox checkbox_unchecked">checked</div>
+            <div id="DXstarToggle" class="checkbox checkbox_unchecked">unchecked</div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <div style="display:grid; height: 15%;">
+        <div id="buttonbackground"></div>
+        <button onclick="loadtsvAsText()" id="displaybutton">Display</button>
+    </div>
+
+</div>
+
+
+<div class="centered" id="main">
+
+    <div id="credentials">
+        <img id="pfp">
+        
+        <div id="username_rating">
+            <span id="username">Username</span>
+            
+            <div style="display:grid;">
+                <img id="rating_border" src="border 15k.png" class="absoluteposition">
+                <span id="ratingDisplay"></span>
+            </div>
+        </div>
+
+        <div id="optionalImage_container">
+            <img id="optionalImage" src="https://lh3.googleusercontent.com/d/1BqbSNL2RVGjwQLjCJKrh-T5cFNA7zYnP=w1000?authuser=1/view" class="absoluteposition">
+        </div>
+
+        <div id="details">
+            <span id="credit">AstroChart by @LangLang</span>
+            <div id="date_type">
+                <span id="chartTypeDisplay">Best 50 Score</span>
+                <span id="date">0/0/0</span>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+<div id="screen">
+
+</div>
+</div>
+<div class="centered" id="back_save">
+    <button onclick="back()" class="back_saveButton">Back</button>
+    <button onclick="save()" class="back_saveButton">Save Chart</button>
+</div>
+
+
+
+<!--
+<input type="file" id="fileToLoad" class="button">
+<button onclick="loadFileAsText()" class="button">Load Selected File</button>
+-->
+
+
+
+</body>
+<script src="Maimai Chart Constants.js"></script>
+
+<script type="text/javascript">
+
+var counter = 0
+var screen = document.getElementById("screen")
+var totalrating = 0
+
+function generate ()
+{
+    //hideclass('button')
+
+    //date
+    n =  new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+
+
+    counter = 0
+    totalrating = 0
+    const children = Array.from(screen.children);
+    for (const child of children) {
+        if (/* child.id !== "frog" && child.class !== "endbutton" */ true) {
+            screen.removeChild(child);
+        }
+    }
+
+    if (document.getElementById("chartType").value == "DX Rating")
+    {
+        var chartstext = document.createElement('span')
+        chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ New Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
+        chartstext.style.margin = "20px 0px 10px 0px"
+        chartstext.style.display = "block"
+        chartstext.style.color = "#e99d9d"
+        chartstext.classList.add('ChartsText')
+        screen.appendChild(chartstext)
+        document.getElementById("chartTypeDisplay").innerHTML = "DX Rating: " + data[3][14]
+    }
+    
+    
+
+    
+    for (var i = 0; i < 10; i++)
+    {
+
+        var newRow = document.createElement('div')
+
+        newRow.style.display = "flex"
+
+        if (document.getElementById("chartType").value == "DX Rating")
+        {
+            if (i == 3)
+            {
+                var chartstext = document.createElement('span')
+                chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Old Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
+                chartstext.style.margin = "10px 0px 10px 0px"
+                chartstext.style.display = "block"
+                chartstext.style.color = "lightblue"
+                chartstext.classList.add('ChartsText')
+                screen.appendChild(chartstext)
+                counter=counter+2
+            }
+        }
+
+        for (var p = 0; p < 5; p++)
+        {
+
+            var newChart = document.createElement('div')
+            newChart.classList.add('chart')
+
+            /*
+            if (data[counter][1] == "\"411Ψ892\"")
+            {
+                newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/“411Ψ892”.png)"
+            }
+            else if (data[counter][1].startsWith("Sqlupp"))
+            {
+                newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/Sqlupp.png)" //I give up
+            }
+            else
+            {
+                newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/" + data[counter][1]
+                .replace(/ /g, "%20")
+                .replace(/\(/g, "%28")
+                .replace(/\)/g, "%29")
+                .replace(/'/g, '%27')
+                .replace(/:/g, '')
+                .replace(/#/g, '%23')
+                .replace(/\//g, '') 
+                + ".png)"
+            }
+            */
+
+            newChart.style.background =  ("linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/cover/" + data[counter][9])
+            newChart.style.backgroundSize = "cover"
+            newChart.style.backgroundPosition = "center"
+            
+            var text = document.createElement('p')
+            text.classList.add('absoluteposition')
+
+            text.innerHTML = "#" + (counter + 1)
+            text.style.transform = "translate(5px, -6px)"
+            text.style.fontSize = "11px"
+            
+            newChart.appendChild(text)
+
+            if (!parseInt(data[counter][6]) > 0)
+            {
+                newChart.style.background =  ("linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)")
+            }
+            else
+            {
+                //title
+                text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                text.innerHTML = truncateText(data[counter][1], 200, "16px Arial")
+
+                
+                text.style.transform = "translate(5px, 6px)"
+                text.style.fontSize = "11px"
+                
+                newChart.appendChild(text)
+
+
+                //type
+                //text = document.createElement('img')
+                text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                if (data[counter][10] == "std")
+                {
+                    //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-std.png"
+                    text.innerHTML="STD"
+                }
+                else
+                {
+                    //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-dx.png"
+                    text.innerHTML="DX"
+                }
+                
+                text.style.transform = "translate(5px, 20px)"
+                //text.style.width = "40px"
+                text.style.fontSize = "11px"
+                newChart.appendChild(text)
+
+
+                //accuracy
+                text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                text.innerHTML = data[counter][4]
+                text.style.transform = "translate(4px, 51px)"
+                text.style.fontSize = "12px"
+                
+                newChart.appendChild(text)
+
+
+                //rank
+                text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                text.innerHTML = data[counter][5]
+                text.style.transform = "translate(5px, 57px)"
+                text.style.fontSize = "18px"
+                
+                newChart.appendChild(text)
+
+
+                //internal diff
+                text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                /*
+                for (var o = 0; o < songdata.split("\n").length; o++)
+                {
+                    
+                    if (data[counter][3] == songdata.split("\n")[o].split("\t")[2])
+                    {
+                        if (songdata.split("\n")[o].split("\t")[3] % 1 == 0)
+                        {
+                            text.innerHTML = songdata.split("\n")[o].split("\t")[3] + ".0"
+                        }
+                        else
+                        {
+                            text.innerHTML = songdata.split("\n")[o].split("\t")[3]
+                        }
+                        
+                        console.log(songdata.split("\n")[o].split("\t")[3])
+                        o=songdata.split("\n").length
+                    }
+                    
+
+                }
+                */
+
+                if (data[counter][3] % 1 == 0 && !(data[counter][3].includes(".0")))
+                {
+                    text.innerHTML = data[counter][3] + ".0"
+                }
+                else
+                {
+                    text.innerHTML = data[counter][3]
+                }
+
+                
+                text.style.transform = "translate(119px, 45px)"
+                text.style.fontSize = "13px"
+                
+                newChart.appendChild(text)
+
+
+                //Rating
+                text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                text.innerHTML = data[counter][6]
+                text.style.transform = "translate(110px, 50px)"
+                text.style.fontSize = "22px"
+                totalrating = totalrating + parseInt(data[counter][6])
+
+                newChart.appendChild(text)
+
+
+                //Difficulty
+                text = document.createElement('div')
+                text.classList.add('absoluteposition')
+                text.classList.add('triangle')
+                if (data[counter][2] == "BASIC")
+                {
+                    text.style.borderColor = "rgb(46 189 99) rgb(46 189 99) transparent transparent"
+                }
+                else if (data[counter][2] == "ADVANCED")
+                {
+                    text.style.borderColor = "rgb(248 159 54) rgb(248 159 54) transparent transparent"
+                }
+                else if (data[counter][2] == "EXPERT")
+                {
+                    text.style.borderColor = "rgb(238 70 94) rgb(238 70 94) transparent transparent"
+                }
+                else if (data[counter][2] == "MASTER")
+                {
+                    text.style.borderColor = "rgb(124 54 177) rgb(124 54 177) transparent transparent"
+                }
+                else if (data[counter][2] == "Re:MASTER")
+                {
+                    text.style.borderColor = "rgb(204 133 255) rgb(204 133 255) transparent transparent"
+                }
+                else
+                {
+                    text.style.borderColor = "transparent transparent transparent transparent"
+                }
+
+                text.style.transform = "translate(118px, 0px)"
+                newChart.appendChild(text)
+
+
+                //FC/AP
+                if (getComputedStyle(document.getElementById("FCAPToggle")).getPropertyValue("font-family") == "checked")
+                {
+                    text = document.createElement('img')
+                    text.classList.add('absoluteposition')
+                    if (data[counter][7] == "")
+                    {
+                        text.src = "Clear.png"
+                    }
+                    else
+                    {
+                        text.src = data[counter][7] + ".png"
+                    }
+
+                    text.style.width = "17px"
+                    if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") == "unchecked")
+                    {
+                        text.style.transform = "translate(44px, 78px)"
+                    }
+                    else
+                    {
+                        text.style.transform = "translate(65px, 78px)"
+                    }
+                    newChart.appendChild(text)
+                }
+
+                //DX☆
+                if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") =="checked")
+                {
+                    text = document.createElement('img')
+                    text.classList.add('absoluteposition')
+                    text.src = "DX" + data[counter][8] + ".png"
+                    text.style.width = "17px"
+                    text.style.transform = "translate(44px, 78px)"
+                    newChart.appendChild(text)
+                }   
+            }
+
+            
+
+
+            newRow.appendChild(newChart)
+
+            counter++
+        }
+
+        screen.appendChild(newRow)
+    }
+
+
+    if (totalrating >= 15000)
+    {
+        document.getElementById("rating_border").src="border 15k.png"
+    }
+    else if (totalrating >=14500)
+    {
+        document.getElementById("rating_border").src="border 14.5k.png"
+    }
+    else if (totalrating >=14000)
+    {
+        document.getElementById("rating_border").src="border 14k.png"
+    }
+    else if (totalrating >=13000)
+    {
+        document.getElementById("rating_border").src="border 13k.png"
+    }
+    else if (totalrating >=12000)
+    {
+        document.getElementById("rating_border").src="border 12k.png"
+    }
+    else if (totalrating >=10000)
+    {
+        document.getElementById("rating_border").src="border 10k.png"
+    }
+    else
+    {
+        document.getElementById("rating_border").src="border 7k.png"
+    }
+
+    document.getElementById("ratingDisplay").innerHTML = totalrating
+    
+}
+
+//generate()
+
+
+var sheetId = "1wSngHJC9Sdimgz7N5SfqnG5N2-5BnxBhyvywem5uYiE";
+//var type = "Best 50 Rating";
+//Best 50 Rating
+//DX Rating
+
+
+const apiKey = "AIzaSyAr3rTUdyRPsO1yDtL9erI0QsvdALUMAxg";
+
+
+async function fetchSheetAsTSV(range) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+
+  const res = await fetch(url);
+  if (!res.ok)
+  {
+    alert("Failed to fetch sheet data")
+  }
+
+
+  const data = await res.json();
+
+  // Fallback if no values
+  if (!data.values || !Array.isArray(data.values)) return "";
+
+  // Convert to TSV string
+  return data.values
+    .map(row => row.map(cell => (cell ?? "").replace(/\t/g, " ")).join("\t"))
+    .join("\n");
+}
+
+async function fetchCredentials() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Credentials!B1:B2?key=${apiKey}`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch sheet data");
+
+  const data = await res.json();
+
+  return data
+}
+
+
+
+var cdata = []
+var rawdata = []
+var data = []
+
+async function loadtsvAsText(){
+
+    if (document.getElementById("sheets_link").value == "")
+    {
+        alert("Please insert a valid Spreadsheet link / ID")
+        return
+    }
+
+    for (var p = 0; p < document.getElementById("sheets_link").value.split("/").length; p++)
+    {
+        if (document.getElementById("sheets_link").value.split("/")[p] == "d")
+        {
+            sheetId = document.getElementById("sheets_link").value.split("/")[p+1]
+            p=document.getElementById("sheets_link").value.split("/").length
+        }
+        else if (document.getElementById("sheets_link").value.split("/").length == 1 )
+        {
+            sheetId = document.getElementById("sheets_link").value.split("/")[0]
+        }
+    }
+    
+    
+    cdata = await fetchSheetAsTSV("Credentials!B1:B4")
+    console.log(cdata)
+
+    if (cdata.split("\n")[3] != "")
+    {
+        document.getElementById("optionalImage").src=cdata.split("\n")[3]
+        document.getElementById("optionalImage").style.display="block"
+    }
+    else
+    {
+        document.getElementById("optionalImage").style.display="none"
+    }
+    
+
+    document.getElementById("pfp").src=cdata.split("\n")[1]
+    document.getElementById("username").innerHTML=cdata.split("\n")[0]
+    
+
+    document.getElementById("login").style.display="none"
+    document.getElementById("main").style.display="block"
+    document.getElementById("back_save").style.display= "flex"
+
+    rawdata = await fetchSheetAsTSV(document.getElementById("chartType").value)
+    console.log(rawdata)
+    data = (rawdata.split("\n"))
+
+        for (var p = 0; p < data.length; p++)
+        {
+            data[p]=data[p].split("\t")
+        }
+
+        data.splice(0, 1)
+
+        console.log(data)
+
+        //sort()
+        generate()
+}
+
+
+
+/*
+function loadFileAsText(){
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+    var fileReader = new FileReader();
+
+
+    fileReader.onload = function(fileLoadedEvent){
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        data = (textFromFileLoaded.split("\n"))
+
+        for (var p = 0; p < data.length; p++)
+        {
+            data[p]=data[p].split("\t")
+        }
+
+        data.splice(0, 1)
+
+        console.log(data)
+
+        //try
+        //{
+            sort()
+            generate()
+        //}
+        //catch(e)
+        //{
+        //    alert("something went wrong, did you upload the file properly?")
+        //    console.log(e)
+        //}
+
+    };
+
+    fileReader.readAsText(fileToLoad, "UTF-8");
+
+}
+*/
+
+
+
+function sort ()
+{
+    var temp = ""
+
+    for (var p = 0; p < data.length; p++)
+    {
+        if (isNaN(data[p][6]))
+        {
+            data[p][6] = 0
+        }
+    }
+
+    for (var k = 0; k < data.length; k++)
+    {
+        for (var p = 1; p < data.length; p++)
+        {
+            if (data[p][6] > data[p-1][6])
+            {
+                temp = data[p]
+                data[p] = data[p-1]
+                data[p-1] = temp
+            }
+            else if (data[p][6] == data[p-1][6])
+            {
+                if (data[p][3] > data[p-1][3])
+                {
+                    temp = data[p]
+                    data[p] = data[p-1]
+                    data[p-1] = temp
+
+                    if (data[p][4] > data[p-1][4])
+                    {
+                        temp = data[p]
+                        data[p] = data[p-1]
+                        data[p-1] = temp
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
+
+function getfile ()
+{
+    $.get('/Maimai Chart Constants.tsv', function(filedata) {
+        console.log(filedata)
+    })
+}
+
+
+//do I really need chatgpt for this?
+
+function truncateText(text, maxWidth, font) {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      context.font = font;
+
+      if (context.measureText(text).width <= maxWidth) {
+        return text;
+      }
+
+      let truncated = '';
+      const ellipsis = '…';
+      for (let i = 0; i < text.length; i++) {
+        truncated += text[i];
+        if (context.measureText(truncated + ellipsis).width > maxWidth) {
+          return truncated.slice(0, -1) + ellipsis;
+        }
+      }
+      return truncated;
+    }
+
+function hideclass (x)
+{
+    document.querySelectorAll('.'+x).forEach(element => {
+    element.style.display = 'none';
+    }); 
+}
+
+function back ()
+{
+    document.getElementById("back_save").style.display= "none"
+    document.getElementById("main").style.display= "none"
+    document.getElementById("login").style.display= "block"
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const checkboxes = document.querySelectorAll(".checkbox");
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("click", () => {
+        checkbox.classList.toggle("checkbox_checked");
+        checkbox.classList.toggle("checkbox_unchecked");
+      });
+    });
+  });
+
+
+
+//god why does CORS have to interfere again with the saving thing
+
+
+function save ()
+{
+    alert("Unfortunately this isn't supported yet...Goddamnit CORS")
+    //saveDivAsImage("main") 
+}
+
+
+//loadtsvAsText()
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</html> 
