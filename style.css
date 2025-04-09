@@ -287,7 +287,7 @@ option{
 #ratingDisplay{
   transform: translate(120px,23px);
   font-size: 25px;
-  font-family: Thiccboi;
+  font-family: monospace;
   letter-spacing: 5.3px;
 }
 
