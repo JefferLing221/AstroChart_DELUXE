@@ -63,6 +63,16 @@ h3{
   src: url(Thicccboi.ttf);
 }
 
+@font-face {
+  font-family: Trebuchet MS;
+  src: url(Trebuchet MS.ttf);
+}
+
+@font-face {
+  font-family: monospace;
+  src: url(Monospace.ttf);
+}
+
 #screen {
   /*background-color:transparent;*/
   margin:auto;
