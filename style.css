@@ -40,7 +40,8 @@ h3{
   margin:auto;
   /*margin-top: 1%;*/
   resize: none;
-  height: 80%;
+  height: auto;
+  max-height: 600px;
   width:100%;
   max-width: 400px;
   display: block;
@@ -111,6 +112,11 @@ html{
   width:800px;
   margin:auto;
   border-color: white;
+}
+
+#displaybuttoncontainer{
+  display:grid; 
+  height: 80px;
 }
 
 #buttonbackground{
@@ -290,7 +296,6 @@ option{
 }
 
 
-
 #details{
   width: 100%;
   display: flex;
@@ -318,7 +323,7 @@ option{
   border-style: none;
   width:800px;
   margin:auto;
-  display: flex;
+  display: none;
   margin-top: 15px;
 }
 
