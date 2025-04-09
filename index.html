@@ -28,7 +28,7 @@
 
     <br>
     <br>
-    <div style="display:grid; height: 15%;">
+    <div id="displaybuttoncontainer">
         <div id="buttonbackground"></div>
         <button onclick="loadtsvAsText()" id="displaybutton">Display</button>
     </div>
@@ -73,7 +73,7 @@
 </div>
 <div class="centered" id="back_save">
     <button onclick="back()" class="back_saveButton">Back</button>
-    <button onclick="save()" class="back_saveButton">Save Chart</button>
+    <button id="savebutton" class="back_saveButton">Save Chart</button>
 </div>
 
 
@@ -86,10 +86,10 @@
 
 
 </body>
-    <!--
+<!--
 <script src="Maimai Chart Constants.js"></script>
 -->
-    
+
 <script type="text/javascript">
 
 var counter = 0
@@ -242,7 +242,7 @@ function generate ()
                 text.classList.add('absoluteposition')
 
                 text.innerHTML = data[counter][4]
-                text.style.transform = "translate(4px, 51px)"
+                text.style.transform = "translate(4px, 48px)"
                 text.style.fontSize = "12px"
                 
                 newChart.appendChild(text)
@@ -253,8 +253,8 @@ function generate ()
                 text.classList.add('absoluteposition')
 
                 text.innerHTML = data[counter][5]
-                text.style.transform = "translate(5px, 57px)"
-                text.style.fontSize = "18px"
+                text.style.transform = "translate(5px, 53px)"
+                text.style.fontSize = "20px"
                 
                 newChart.appendChild(text)
 
@@ -296,7 +296,7 @@ function generate ()
                 }
 
                 
-                text.style.transform = "translate(119px, 45px)"
+                text.style.transform = "translate(119px, 42px)"
                 text.style.fontSize = "13px"
                 
                 newChart.appendChild(text)
@@ -307,8 +307,8 @@ function generate ()
                 text.classList.add('absoluteposition')
 
                 text.innerHTML = data[counter][6]
-                text.style.transform = "translate(110px, 50px)"
-                text.style.fontSize = "22px"
+                text.style.transform = "translate(104px, 43px)"
+                text.style.fontSize = "26px"
                 totalrating = totalrating + parseInt(data[counter][6])
 
                 newChart.appendChild(text)
@@ -361,14 +361,16 @@ function generate ()
                         text.src = data[counter][7] + ".png"
                     }
 
-                    text.style.width = "17px"
+                    text.style.width = "22px"
+
+
                     if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") == "unchecked")
                     {
-                        text.style.transform = "translate(44px, 78px)"
+                        text.style.transform = "translate(47px, 74px)"
                     }
                     else
                     {
-                        text.style.transform = "translate(65px, 78px)"
+                        text.style.transform = "translate(72px, 74px)"
                     }
                     newChart.appendChild(text)
                 }
@@ -379,8 +381,8 @@ function generate ()
                     text = document.createElement('img')
                     text.classList.add('absoluteposition')
                     text.src = "DX" + data[counter][8] + ".png"
-                    text.style.width = "17px"
-                    text.style.transform = "translate(44px, 78px)"
+                    text.style.width = "22px"
+                    text.style.transform = "translate(47px, 74px)"
                     newChart.appendChild(text)
                 }   
             }
@@ -689,11 +691,33 @@ document.addEventListener("DOMContentLoaded", () => {
 //god why does CORS have to interfere again with the saving thing
 
 
+/*
 function save ()
 {
-    alert("Unfortunately this isn't supported yet...Goddamnit CORS")
-    //saveDivAsImage("main") 
+    //alert("Unfortunately this isn't supported yet...Goddamnit CORS")
+    captureScreenshot() 
 }
+
+function captureScreenshot() {
+    const message = { type: "screenshot-div", selector: "#main" };
+
+    try {
+      chrome.runtime.sendMessage(message, (response) => {
+        if (chrome.runtime.lastError) {
+          console.warn("Extension not installed or not responding.");
+          document.getElementById("extensionMessage").style.color = "red";
+          document.getElementById("extensionMessage").innerText =
+            "Screenshot extension not installed. Please install it to use this feature.";
+        } else {
+          console.log("Screenshot started:", response);
+        }
+      });
+    } catch (err) {
+        console.log(err)
+      console.log("Not in a browser with extension support.");
+    }
+  }
+*/
 
 
 //loadtsvAsText()
