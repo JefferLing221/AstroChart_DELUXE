@@ -135,6 +135,7 @@ function generate ()
 
     if (document.getElementById("chartType").value == "DX Rating")
     {
+        /*
         var chartstext = document.createElement('span')
         chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ New Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
         chartstext.style.margin = "20px 0px 10px 0px"
@@ -142,6 +143,14 @@ function generate ()
         chartstext.style.color = "#e99d9d"
         chartstext.classList.add('ChartsText')
         screen.appendChild(chartstext)
+        */
+
+        var chartstextimage = document.createElement('img')
+        chartstextimage.src = "Newcharts_text.png"
+        chartstextimage.style.margin = "20px 0px 10px 0px"
+        chartstextimage.style.width = "100%"
+        chartstextimage.style.display = "block"
+        screen.appendChild(chartstextimage)
         document.getElementById("chartTypeDisplay").innerHTML = "DX Rating: " + data[3][14]
     }
     
@@ -159,6 +168,7 @@ function generate ()
         {
             if (i == 3)
             {
+                /*
                 var chartstext = document.createElement('span')
                 chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Old Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
                 chartstext.style.margin = "10px 0px 10px 0px"
@@ -166,6 +176,16 @@ function generate ()
                 chartstext.style.color = "lightblue"
                 chartstext.classList.add('ChartsText')
                 screen.appendChild(chartstext)
+                */
+
+
+                var chartstextimage = document.createElement('img')
+                chartstextimage.src = "Oldcharts_text.png"
+                chartstextimage.style.width = "100%"
+                chartstextimage.style.margin = "12px 0px 10px 0px"
+                chartstextimage.style.display = "block"
+                screen.appendChild(chartstextimage)
+
                 counter=counter+2
             }
         }
@@ -392,7 +412,7 @@ function generate ()
                 }
 
                 //DX☆
-                if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") =="checked")
+                if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") =="checked" && parseInt(data[counter][8]) >= 0)
                 {
                     text = document.createElement('img')
                     text.classList.add('absoluteposition')
@@ -728,6 +748,22 @@ function ismobile() {
 function nthnumber(ntn, number){
     return Math.floor((number/Math.pow(10,ntn))%10);    
 }
+
+
+
+document.getElementById("savebutton").addEventListener("click", tempmessage);
+
+
+function tempmessage  ()
+{
+    if (document.getElementById("savebutton").style.display != "block")
+    {
+      alert("Please install the screenshot extension to use the 'Save Chart' feature using the link in the sheets.\nFor mobile users, you can screenshot the page")
+    }
+}
+
+
+
 
 //god why does CORS have to interfere again with the saving thing
 
