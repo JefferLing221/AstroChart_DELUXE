@@ -284,8 +284,24 @@ option{
   transform: translate(0px,11px);
 }
 
+.ratingdigit {
+  width: auto;
+  height: 17px;
+  z-index: 999;
+}
+
+#ratingdigit1{ transform: translate(120.1px, 29.8px); }
+#ratingdigit2{ transform: translate(139.5px, 29.8px); }
+#ratingdigit3{ transform: translate(158.9px, 29.8px); }
+#ratingdigit4{ transform: translate(178.3px, 29.8px); }
+#ratingdigit5{ transform: translate(197.7px, 29.8px); }
+
+
+
+/*not really used since it's broken on mobile*/
 #ratingDisplay{
-  transform: translate(120px,23px);
+  transform: translate(120px,6px);
+  color: transparent;
   font-size: 25px;
   font-family: monospace;
   letter-spacing: 5.3px;
