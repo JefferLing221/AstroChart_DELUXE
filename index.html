@@ -47,6 +47,13 @@
             <div style="display:grid;">
                 <img id="rating_border" src="border 15k.png" class="absoluteposition">
                 <span id="ratingDisplay"></span>
+                <img id="ratingdigit1" src="monospace0.png" class="absoluteposition ratingdigit">
+                <img id="ratingdigit2" src="monospace0.png" class="absoluteposition ratingdigit">
+                <img id="ratingdigit3" src="monospace0.png" class="absoluteposition ratingdigit">
+                <img id="ratingdigit4" src="monospace0.png" class="absoluteposition ratingdigit">
+                <img id="ratingdigit5" src="monospace0.png" class="absoluteposition ratingdigit">
+
+
             </div>
         </div>
 
@@ -103,12 +110,10 @@ function generate ()
     if (ismobile())
     {
         document.getElementById("ratingDisplay").style.fontFamily = "Thicccboi"
-        alert("ismobile")
     }
     else
     {
         document.getElementById("ratingDisplay").style.fontFamily = "monospace"
-        alert("isnotmobile")
     }
 
     //date
@@ -439,6 +444,12 @@ function generate ()
         document.getElementById("rating_border").src="border 7k.png"
     }
 
+
+    document.getElementById("ratingdigit1").src= "monospace" + nthnumber(4,totalrating) + ".png"
+    document.getElementById("ratingdigit2").src= "monospace" + nthnumber(3,totalrating) + ".png"
+    document.getElementById("ratingdigit3").src= "monospace" + nthnumber(2,totalrating) + ".png"
+    document.getElementById("ratingdigit4").src= "monospace" + nthnumber(1,totalrating) + ".png"
+    document.getElementById("ratingdigit5").src= "monospace" + nthnumber(0,totalrating) + ".png"
     document.getElementById("ratingDisplay").innerHTML = totalrating
     
 }
@@ -515,7 +526,7 @@ async function loadtsvAsText(){
     }
     
     
-    cdata = await fetchSheetAsTSV("Credentials!B1:B4")
+    cdata = await fetchSheetAsTSV("Credentials!B2:B5")
     console.log(cdata)
 
     if (cdata.split("\n")[3] != "")
@@ -711,6 +722,11 @@ function ismobile() {
     return toMatch.some((toMatchItem) => {
         return navigator.userAgent.match(toMatchItem);
     });
+}
+
+
+function nthnumber(ntn, number){
+    return Math.floor((number/Math.pow(10,ntn))%10);    
 }
 
 //god why does CORS have to interfere again with the saving thing
