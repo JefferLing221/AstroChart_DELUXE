@@ -369,6 +369,9 @@ option{
   border-width: 1px;
 }
 
+#savebutton{
+  display: inline;
+}
 
 /*
 button{
