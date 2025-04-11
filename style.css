@@ -351,6 +351,7 @@ option{
   margin:auto;
   display: none;
   margin-top: 15px;
+  align-items: flex-start;
 }
 
 .back_saveButton{
