@@ -14,6 +14,10 @@
     <select name="chartType" id="chartType">
       <option value="Best 50 Rating">Best 50</option>
       <option value="DX Rating">DX Rating</option>
+      <option value="14+ Chart Constants">14+, 15 Chart Constants</option>
+      <option value="14 Chart Constants">14 Chart Constants</option>
+      <option value="13+ Chart Constants">13+ Chart Constants</option>
+      <option value="13 Chart Constants">13 Chart Constants</option>
     </select>
     <br>
     <div id="markers">
@@ -104,8 +108,17 @@ var counter = 0
 var screen = document.getElementById("screen")
 var totalrating = 0
 
+var constantGroups = 
+[
+    ["14+",["15.0","14.9","14.8","14.7","14.6"]],
+    ["14",["14.5","14.4","14.3","14.2","14.1","14.0"]],
+    ["13+",["13.9","13.8","13.7","13.6"]],
+    ["13",["13.5","13.4","13.3","13.2","13.1","13.0"]]
+]
+
 function generate ()
 {
+
     //hideclass('button')
 
     if (ismobile())
@@ -129,349 +142,868 @@ function generate ()
     totalrating = 0
     const children = Array.from(screen.children);
     for (const child of children) {
-        if (/* child.id !== "frog" && child.class !== "endbutton" */ true) {
-            screen.removeChild(child);
-        }
+        screen.removeChild(child);
     }
 
-    if (document.getElementById("chartType").value == "DX Rating")
+    console.log(document.getElementById("chartType").value)
+    console.log(document.getElementById("chartType").value.includes("Chart Constants"))
+
+
+    if (document.getElementById("chartType").value.includes("Chart Constants"))
     {
-        /*
-        var chartstext = document.createElement('span')
-        chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ New Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
-        chartstext.style.margin = "20px 0px 10px 0px"
-        chartstext.style.display = "block"
-        chartstext.style.color = "#e99d9d"
-        chartstext.classList.add('ChartsText')
-        screen.appendChild(chartstext)
-        */
+        
 
-        var chartstextimage = document.createElement('img')
-        chartstextimage.src = "Newcharts_text.png"
-        chartstextimage.style.margin = "20px 0px 10px 0px"
-        chartstextimage.style.width = "100%"
-        chartstextimage.style.display = "block"
-        screen.appendChild(chartstextimage)
-        document.getElementById("chartTypeDisplay").innerHTML = "DX Rating: " + data[3][14]
-    }
-    
-    
-
-    
-    for (var i = 0; i < 10; i++)
-    {
-
-        var newRow = document.createElement('div')
-
-        newRow.style.display = "flex"
-
-        if (document.getElementById("chartType").value == "DX Rating")
+        document.getElementById("chartTypeDisplay").innerHTML = document.getElementById("chartType").value
+        if (document.getElementById("chartType").value == "14+ Chart Constants")
         {
-            if (i == 3)
-            {
-                /*
-                var chartstext = document.createElement('span')
-                chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Old Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
-                chartstext.style.margin = "10px 0px 10px 0px"
-                chartstext.style.display = "block"
-                chartstext.style.color = "lightblue"
-                chartstext.classList.add('ChartsText')
-                screen.appendChild(chartstext)
-                */
+            document.getElementById("chartTypeDisplay").innerHTML = "14+ ~ 15 Chart Constants"
+        }
 
+        var constantIndex = document.getElementById("chartType").value.split(" ")[0]
+        var group = []
 
-                var chartstextimage = document.createElement('img')
-                chartstextimage.src = "Oldcharts_text.png"
-                chartstextimage.style.width = "100%"
-                chartstextimage.style.margin = "12px 0px 10px 0px"
-                chartstextimage.style.display = "block"
-                screen.appendChild(chartstextimage)
-
-                counter=counter+2
+        for (var p = 0; p < constantGroups.length; p++)
+        {
+            if (constantGroups[p][0] == constantIndex)
+            {   
+                group = constantGroups[p][1]
+                console.log(group)
             }
         }
 
-        for (var p = 0; p < 5; p++)
+        var contentsLoop = true
+
+        var medalImages = ["", "medal_S.png", "medal_S+.png", "medal_SS.png", "medal_SS+.png", "medal_SSS.png", "medal_SSS+.png", "AP+.png", "AP.png", "FC+.png", "FC.png", "Clear.png","DX5.png","DX4.png","DX3.png","DX2.png","DX1.png"]  
+        var totalRankData = [ 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  ]
+                          //[ na , S  , S+ , SS , SS+, SSS,SSS+, AP+, AP , FC+, FC , C  , DX5, DX4, DX3, DX2, DX1]
+
+
+        var groupContents = [[],[],[],[],[],[]]
+        var groupContentsDate = [[],[],[],[],[],[]]
+
+        while(contentsLoop)
         {
-
-            var newChart = document.createElement('div')
-            newChart.classList.add('chart')
-
-            /*
-            if (data[counter][1] == "\"411Ψ892\"")
+            for (var h = 0; h < group.length; h++)
             {
-                newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/“411Ψ892”.png)"
-            }
-            else if (data[counter][1].startsWith("Sqlupp"))
-            {
-                newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/Sqlupp.png)" //I give up
-            }
-            else
-            {
-                newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/" + data[counter][1]
-                .replace(/ /g, "%20")
-                .replace(/\(/g, "%28")
-                .replace(/\)/g, "%29")
-                .replace(/'/g, '%27')
-                .replace(/:/g, '')
-                .replace(/#/g, '%23')
-                .replace(/\//g, '') 
-                + ".png)"
-            }
-            */
-
-            newChart.style.background =  ("linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/cover/" + data[counter][9])
-            newChart.style.backgroundSize = "cover"
-            newChart.style.backgroundPosition = "center"
-            
-            var text = document.createElement('p')
-            text.classList.add('absoluteposition')
-
-            text.innerHTML = "#" + (counter + 1)
-            text.style.transform = "translate(5px, -6px)"
-            text.style.fontSize = "11px"
-            
-            newChart.appendChild(text)
-
-            if (!parseInt(data[counter][6]) > 0)
-            {
-                newChart.style.background =  ("linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)")
-            }
-            else
-            {
-                //title
-                text = document.createElement('p')
-                text.classList.add('absoluteposition')
-
-                text.innerHTML = truncateText(data[counter][1], 200, "16px Arial")
-
-                
-                text.style.transform = "translate(5px, 6px)"
-                text.style.fontSize = "11px"
-                
-                newChart.appendChild(text)
-
-
-                //type
-                //text = document.createElement('img')
-                text = document.createElement('p')
-                text.classList.add('absoluteposition')
-
-                if (data[counter][10] == "std")
+                if ( (parseFloat(data[counter][3]) == parseFloat(group[h]) && data[counter][11] != "utage") || data[counter][0] == "")
                 {
-                    //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-std.png"
-                    text.innerHTML="STD"
+                    groupContents[h].push(counter)
+                    groupContentsDate[h].push(
+                        parseInt(data[counter][12].split("-")[0]*365) + parseInt(data[counter][12].split("-")[1]*31) + parseInt(data[counter][12].split("-")[2])
+                    )
+
+                    //Rank data
+                    if (data[counter][7] == "SSS+")
+                    {
+                        totalRankData[6]++
+                    }
+                    else if (data[counter][7] == "SSS")
+                    {
+                        totalRankData[5]++
+                    }
+                    else if (data[counter][7] == "SS+")
+                    {
+                        totalRankData[4]++
+                    }
+                    else if (data[counter][7] == "SS")
+                    {
+                        totalRankData[3]++
+                    }
+                    else if (data[counter][7] == "S+")
+                    {
+                        totalRankData[2]++
+                    }
+                    else if (data[counter][7] == "S")
+                    {
+                        totalRankData[1]++
+                    }
+                    else
+                    {
+                        totalRankData[0]++
+                    }
+
+                    //FC/AP data
+                    if (data[counter][5] == "AP+")
+                    {
+                        totalRankData[7]++
+                    }
+                    else if (data[counter][5] == "AP")
+                    {
+                        totalRankData[8]++
+                    }
+                    else if (data[counter][5] == "FC+")
+                    {
+                        totalRankData[9]++
+                    }
+                    else if (data[counter][5] == "FC")
+                    {
+                        totalRankData[10]++
+                    }
+                    else
+                    {
+                        totalRankData[11]++
+                    }
+
+                    //DX☆ data
+                    if (data[counter][6] > 0)
+                    {
+                        totalRankData[ 17 - parseInt(data[counter][6]) ]++ 
+                    }
+
+
+                    break
+                }
+            }
+            counter++
+
+            if (data[counter][0] == "")
+            {
+                counter=0
+                contentsLoop = false
+            }
+        }
+
+        console.log(totalRankData)
+
+
+        var medalTransformList = [
+        "",
+
+        "380px, 0px",
+        "320px, 0px", 
+        "257.5px, 0px", 
+        "185px, 0px", 
+        "102.5px, 0px", 
+        "20px, 0px",
+
+        "470px, 0px",
+        "535px, 0px",
+        "600px, 0px",
+        "665px, 0px",
+        "730px, 0px",
+
+        "470px, 30px",
+        "535px, 30px",
+        "600px, 30px",
+        "665px, 30px",
+        "730px, 30px",
+        ]
+
+        var medalTextTransformList = [
+        "",
+
+        "420px, 2px", 
+        "365px, 2px", 
+        "305px, 2px", 
+        "235px, 2px",
+        "155px, 2px",
+        "75px, 2px",
+
+        "500px, 2px",
+        "565px, 2px",
+        "630px, 2px",
+        "695px, 2px",
+        "760px, 2px",
+
+        "500px, 32px",
+        "565px, 32px",
+        "630px, 32px",
+        "695px, 32px",
+        "760px, 32px",
+        ]
+
+        totalRankDataDisplay = document.createElement('div')
+        totalRankDataDisplay.style.display = "grid"
+
+            for (var q = totalRankData.length-1; q > 0; q--)
+            {
+                totalRankDataDisplay.style.height="32px"
+
+                if (!DXstarToggled())
+                {
+                    if (q == totalRankData.length-1)
+                    {
+                        q=q-5
+                    }
                 }
                 else
                 {
-                    //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-dx.png"
-                    text.innerHTML="DX"
-                }
-                
-                text.style.transform = "translate(5px, 20px)"
-                //text.style.width = "40px"
-                text.style.fontSize = "11px"
-                newChart.appendChild(text)
-
-
-                //accuracy
-                text = document.createElement('p')
-                text.classList.add('absoluteposition')
-
-                text.innerHTML = data[counter][4]
-                text.style.transform = "translate(4px, 48px)"
-                text.style.fontSize = "12px"
-                
-                newChart.appendChild(text)
-
-
-                //rank
-                text = document.createElement('p')
-                text.classList.add('absoluteposition')
-
-                text.innerHTML = data[counter][5]
-                text.style.transform = "translate(5px, 53px)"
-                text.style.fontSize = "20px"
-                
-                newChart.appendChild(text)
-
-
-                //internal diff
-                text = document.createElement('p')
-                text.classList.add('absoluteposition')
-
-                /*
-                for (var o = 0; o < songdata.split("\n").length; o++)
-                {
-                    
-                    if (data[counter][3] == songdata.split("\n")[o].split("\t")[2])
+                    if (FCAPToggled())
                     {
-                        if (songdata.split("\n")[o].split("\t")[3] % 1 == 0)
+                        totalRankDataDisplay.style.height="62px"
+                    }
+                }
+
+                if (!FCAPToggled() && q == totalRankData.length-6)
+                {
+                    q=q-5
+                }
+
+
+                img = document.createElement('img')
+                img.classList.add('medalrecord')
+                
+                text = document.createElement('span')
+                text.classList.add('medaltext')
+
+                img.src = medalImages[q]
+                text.innerHTML = totalRankData[q]
+
+                if (DXstarToggled() && !FCAPToggled() && q > totalRankData.length-6 && q <= totalRankData.length-1)
+                {
+                    img.style.transform = "translate(" + medalTransformList[q-5] + ")"
+                    text.style.transform = "translate(" + medalTextTransformList[q-5] + ")"
+                }
+                else
+                {
+                    img.style.transform = "translate(" + medalTransformList[q] + ")"
+                    text.style.transform = "translate(" + medalTextTransformList[q] + ")"
+                }   
+                totalRankDataDisplay.appendChild(img)
+                totalRankDataDisplay.appendChild(text)  
+            }
+
+
+        screen.appendChild(totalRankDataDisplay)
+
+        var separator = document.createElement('div')
+        separator.style.backgroundColor = "#e2e9f9"
+        //separator.style.margin = "0px 0px 20px"
+        separator.style.width = "100%"
+        separator.style.height = "2px"
+        separator.style.display = "block"
+        screen.appendChild(separator)
+
+        //sort by date
+        var temp = 0
+        for (var m = 0; m < groupContents.length; m++)
+        {
+            for (var r = 0; r < groupContents[m].length; r++)
+            {
+                for (var o = 0; o < groupContents[m].length-1; o++)
+                {
+                    if (groupContentsDate[m][o] > groupContentsDate[m][o+1])
+                    {
+                        temp = groupContentsDate[m][o]
+                        groupContentsDate[m][o] = groupContentsDate[m][o+1]
+                        groupContentsDate[m][o+1] = temp
+
+                        temp = groupContents[m][o]
+                        groupContents[m][o] = groupContents[m][o+1]
+                        groupContents[m][o+1] = temp
+                    }
+                }
+            }
+        }
+
+        var highestRank = 6
+        /*
+        0 na
+        1 s
+        2 s+
+        3 ss
+        4 ss+
+        5 sss
+        6 sss+
+        */
+
+        for (var i = 0; i < group.length; i++)
+        {
+            highestRank = 6
+
+            var newRow = document.createElement('div')
+            newRow.style.display = "flex"
+            newRow.style.paddingTop = "20px"
+
+            var rowHeader = document.createElement('div')
+            rowHeader.classList.add('constantchartheader')
+            //rowHeader.innerHTML = group[i]
+
+                var headerContents = document.createElement('div')
+                headerContents.style.display = "grid"
+                headerContents.style.maxHeight = "47px"
+
+                    var headerConstant = document.createElement('span')
+                    headerConstant.classList.add('absoluteposition')
+                    headerConstant.innerHTML = group[i]
+
+                headerContents.appendChild(headerConstant)
+
+
+            var chartContainer = document.createElement('div')
+            chartContainer.classList.add('chartcontainer')
+            chartContainer.style.marginBottom = "10px"
+            chartContainer.style.marginTop = "10px"
+            
+
+            var chartRow_loop = true
+
+
+            while(chartRow_loop)
+            {
+                var chartColumn = document.createElement('div')
+                chartColumn.style.display = "flex"
+
+                for (var p = 0; p < 8; p++)
+                {   
+                    if (counter < groupContents[i].length)
+                    {
+
+                        var newChart = document.createElement('div')
+                        newChart.classList.add('constantchart')
+
+                        if (data[groupContents[i][counter]][2] == "BASIC")
                         {
-                            text.innerHTML = songdata.split("\n")[o].split("\t")[3] + ".0"
+                            //newChart.style.backgroundColor = "rgb(46 189 99)"
+                        }
+                        else if (data[groupContents[i][counter]][2] == "ADVANCED")
+                        {
+                            //newChart.style.backgroundColor = "rgb(248 159 54)"
+                        }
+                        else if (data[groupContents[i][counter]][2] == "EXPERT")
+                        {
+                            //newChart.style.backgroundColor = "rgb(238 70 94)"
+                        }
+                        else if (data[groupContents[i][counter]][2] == "MASTER")
+                        {
+                            newChart.style.backgroundColor = "rgb(87 39 124)"
+                        }
+                        else if (data[groupContents[i][counter]][2] == "Re:MASTER")
+                        {
+                            newChart.style.backgroundColor = "rgb(122 93 120)"
                         }
                         else
                         {
-                            text.innerHTML = songdata.split("\n")[o].split("\t")[3]
+                            newChart.style.backgroundColor = "transparent"
                         }
+
+                        //image
+                        img = document.createElement('img')
+                        img.src = ("https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/cover/" + data[ groupContents[i][counter] ][13])
+                        img.style.transform = "translate(5px, 6px)"
+                        img.style.height = "64px"
+                        img.style.width = "64px"
+                        img.classList.add('absoluteposition')
+
+                        newChart.appendChild(img)
+
+                        //border
+                        img = document.createElement('img')
+                        img.classList.add('absoluteposition')
+
+                        if (data[groupContents[i][counter]][7] == "S" || data[groupContents[i][counter]][7] == "S+")
+                        {
+                            img.src = "border_silver.png"
+                            img.style.transform = "translate(-3.3px, -1px)"
+                            img.style.height = "78px"
+                            img.style.width = "78px"
+
+                            if (highestRank > 1 && data[groupContents[i][counter]][7] == "S")
+                            {
+                                highestRank = 1
+                            }
+                            else if (highestRank > 2 && data[groupContents[i][counter]][7] == "S+")
+                            {
+                                highestRank = 2
+                            }
+                        }
+                        else if (data[groupContents[i][counter]][7] == "SS" || data[groupContents[i][counter]][7] == "SS+")
+                        {
+                            img.src = "border_gold.png"
+                            img.style.transform = "translate(-1px, -0.5px)"
+                            img.style.height = "76px"
+                            img.style.width = "76px"
+
+                            if (highestRank > 3 && data[groupContents[i][counter]][7] == "SS")
+                            {
+                                highestRank = 3
+                            }
+                            else if (highestRank > 4 && data[groupContents[i][counter]][7] == "SS+")
+                            {
+                                highestRank = 4
+                            }
+                        }
+                        else if (data[groupContents[i][counter]][7] == "SSS" || data[groupContents[i][counter]][7] == "SSS+")
+                        {
+                            img.src = "border_rainbow.png"
+                            img.style.transform = "translate(-1.4px, -2px)"
+                            img.style.height = "79px"
+                            img.style.width = "77px"
+
+                            if (highestRank > 5 && data[groupContents[i][counter]][7] == "SSS")
+                            {
+                                highestRank = 5
+                            }
+                        }
+                        else
+                        {
+                            highestRank = 0
+                        }
+
+                        newChart.appendChild(img)
+
+
+                        //accuracy
+                        text = document.createElement('span')
+                        text.classList.add('absoluteposition')
+
+                        text.innerHTML = truncateText(data[ groupContents[i][counter] ][4], 200, "16px Arial")
                         
-                        console.log(songdata.split("\n")[o].split("\t")[3])
-                        o=songdata.split("\n").length
+                        text.style.transform = "translate(-1.5px, 79px)"
+                        text.style.fontSize = "14px"
+                        text.style.height = "15px"
+                        text.style.textAlign = "center"
+                        
+                        newChart.appendChild(text)
+
+                        //version
+                        img = document.createElement('img')
+                        if (data[ groupContents[i][counter] ][11] == "std")
+                        {
+                            img.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-std.png"
+                            img.style.transform = "translate(0px, -13px)"
+                        }
+                        else
+                        {
+                            img.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-dx.png"
+                            //img.style.transform = "translate(36px, -13px)"
+                            img.style.transform = "translate(0px, -13px)"
+                        }
+
+                        img.classList.add('absoluteposition')
+                        img.style.height =  "11px"
+
+                        newChart.appendChild(img)
+
+
+                        //plus
+                        if (data[groupContents[i][counter]][7].includes("+"))
+                        {
+                            img = document.createElement('img')
+
+                            img.src = "plus.png"
+                            img.style.transform = "translate(57px, -10px)"
+                            img.style.height = "30px"
+                            img.style.width = "auto"
+
+                            img.classList.add('absoluteposition')
+
+                            newChart.appendChild(img)
+                        }
+
+                        //FC/AP
+                        if (getComputedStyle(document.getElementById("FCAPToggle")).getPropertyValue("font-family") == "checked")
+                        {
+                            newChart.style.height = "130px"
+                            img = document.createElement('img')
+                            img.classList.add('absoluteposition')
+                            if (data[groupContents[i][counter]][5] == "")
+                            {
+                                img.src = "Clear.png"
+                            }
+                            else
+                            {
+                                img.src = data[groupContents[i][counter]][5] + ".png"
+                            }
+
+                            img.style.width = "28px"
+
+
+                            if (!DXstarToggled())
+                            {
+                                img.style.transform = "translate(23px, 97.5px)"
+                            }
+                            else
+                            {
+                                img.style.transform = "translate(39px, 97.5px)"
+                            }
+                            newChart.appendChild(img)
+                        }
+
+                        //DX☆
+                        if (DXstarToggled() && parseInt(data[groupContents[i][counter]][6]) >= 0)
+                        {
+                            newChart.style.height = "130px"
+                            img = document.createElement('img')
+                            img.classList.add('absoluteposition')
+                            img.src = "DX" + data[groupContents[i][counter]][6] + ".png"
+                            img.style.width = "28px"
+
+                            if (!FCAPToggled())
+                            {
+                                img.style.transform = "translate(23px, 97.5px)"
+                            }
+                            else
+                            {
+                                img.style.transform = "translate(6.5px, 97.5px)"
+                            }
+                            
+                            newChart.appendChild(img)
+                        }
+        
+
+                        if (data[counter][0] == "")
+                        {
+                            newChart.style.display = "none"
+                        }
+
+                        chartColumn.appendChild(newChart)
+
+                        counter++
                     }
-                    
-
-                }
-                */
-
-                if (data[counter][3] % 1 == 0 && !(data[counter][3].includes(".0")))
-                {
-                    text.innerHTML = data[counter][3] + ".0"
-                }
-                else
-                {
-                    text.innerHTML = data[counter][3]
                 }
 
-                
-                text.style.transform = "translate(118px, 42px)"
-                text.style.fontSize = "13px"
-                
-                newChart.appendChild(text)
+                chartContainer.appendChild(chartColumn)
 
-
-                //Rating
-                text = document.createElement('p')
-                text.classList.add('absoluteposition')
-
-                text.innerHTML = data[counter][6]
-                text.style.transform = "translate(103px, 43px)"
-                text.style.fontSize = "26px"
-                totalrating = totalrating + parseInt(data[counter][6])
-
-                newChart.appendChild(text)
-
-
-                //Difficulty
-                text = document.createElement('div')
-                text.classList.add('absoluteposition')
-                text.classList.add('triangle')
-                if (data[counter][2] == "BASIC")
+                if (counter >= groupContents[i].length)
                 {
-                    text.style.borderColor = "rgb(46 189 99) rgb(46 189 99) transparent transparent"
+                    counter=0
+                    chartRow_loop = false
                 }
-                else if (data[counter][2] == "ADVANCED")
-                {
-                    text.style.borderColor = "rgb(248 159 54) rgb(248 159 54) transparent transparent"
-                }
-                else if (data[counter][2] == "EXPERT")
-                {
-                    text.style.borderColor = "rgb(238 70 94) rgb(238 70 94) transparent transparent"
-                }
-                else if (data[counter][2] == "MASTER")
-                {
-                    text.style.borderColor = "rgb(124 54 177) rgb(124 54 177) transparent transparent"
-                }
-                else if (data[counter][2] == "Re:MASTER")
-                {
-                    text.style.borderColor = "rgb(204 133 255) rgb(204 133 255) transparent transparent"
-                }
-                else
-                {
-                    text.style.borderColor = "transparent transparent transparent transparent"
-                }
-
-                text.style.transform = "translate(118px, 0px)"
-                newChart.appendChild(text)
-
-
-                //FC/AP
-                if (getComputedStyle(document.getElementById("FCAPToggle")).getPropertyValue("font-family") == "checked")
-                {
-                    text = document.createElement('img')
-                    text.classList.add('absoluteposition')
-                    if (data[counter][7] == "")
-                    {
-                        text.src = "Clear.png"
-                    }
-                    else
-                    {
-                        text.src = data[counter][7] + ".png"
-                    }
-
-                    text.style.width = "22px"
-
-
-                    if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") == "unchecked")
-                    {
-                        text.style.transform = "translate(54px, 74px)"
-                    }
-                    else
-                    {
-                        text.style.transform = "translate(79px, 74px)"
-                    }
-                    newChart.appendChild(text)
-                }
-
-                //DX☆
-                if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") =="checked" && parseInt(data[counter][8]) >= 0)
-                {
-                    text = document.createElement('img')
-                    text.classList.add('absoluteposition')
-                    text.src = "DX" + data[counter][8] + ".png"
-                    text.style.width = "22px"
-                    text.style.transform = "translate(54px, 74px)"
-                    newChart.appendChild(text)
-                }   
             }
 
             
+            if (highestRank > 0)
+            {
+                headerRankMedal = document.createElement('img')
+                headerRankMedal.classList.add('medal')
+                headerRankMedal.src = medalImages[highestRank]
 
+                headerRankMedal.style.transform = "translate(3px, -33px)"
 
-            newRow.appendChild(newChart)
+                headerContents.appendChild(headerRankMedal)
+            }   
 
-            counter++
+            rowHeader.appendChild(headerContents)
+
+            newRow.appendChild(rowHeader)
+
+            newRow.appendChild(chartContainer)
+            
+
+            screen.appendChild(newRow)
+            
+
+            if (i != (group.length-1))
+            {
+                var separator = document.createElement('div')
+                separator.style.backgroundColor = "#e2e9f9"
+                //separator.style.margin = "0px 0px 20px"
+                separator.style.width = "100%"
+                separator.style.height = "2px"
+                separator.style.display = "block"
+                screen.appendChild(separator)
+            }
         }
 
-        screen.appendChild(newRow)
-    }
-
-
-    if (totalrating >= 15000)
-    {
-        document.getElementById("rating_border").src="border 15k.png"
-    }
-    else if (totalrating >=14500)
-    {
-        document.getElementById("rating_border").src="border 14.5k.png"
-    }
-    else if (totalrating >=14000)
-    {
-        document.getElementById("rating_border").src="border 14k.png"
-    }
-    else if (totalrating >=13000)
-    {
-        document.getElementById("rating_border").src="border 13k.png"
-    }
-    else if (totalrating >=12000)
-    {
-        document.getElementById("rating_border").src="border 12k.png"
-    }
-    else if (totalrating >=10000)
-    {
-        document.getElementById("rating_border").src="border 10k.png"
     }
     else
     {
-        document.getElementById("rating_border").src="border 7k.png"
+
+        if (document.getElementById("chartType").value == "DX Rating")
+        {
+            /*
+            var chartstext = document.createElement('span')
+            chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ New Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
+            chartstext.style.margin = "20px 0px 10px 0px"
+            chartstext.style.display = "block"
+            chartstext.style.color = "#e99d9d"
+            chartstext.classList.add('ChartsText')
+            screen.appendChild(chartstext)
+            */
+
+            var chartstextimage = document.createElement('img')
+            chartstextimage.src = "Newcharts_text.png"
+            chartstextimage.style.margin = "20px 0px 10px 0px"
+            chartstextimage.style.width = "100%"
+            chartstextimage.style.display = "block"
+            screen.appendChild(chartstextimage)
+            document.getElementById("chartTypeDisplay").innerHTML = "DX Rating: " + data[3][14]
+        }
+        else
+        {
+            document.getElementById("chartTypeDisplay").innerHTML = document.getElementById("chartType").value
+        }
+        
+        
+        for (var i = 0; i < 10; i++)
+        {
+
+            var newRow = document.createElement('div')
+
+            newRow.style.display = "flex"
+
+            if (document.getElementById("chartType").value == "DX Rating")
+            {
+                if (i == 3)
+                {
+                    /*
+                    var chartstext = document.createElement('span')
+                    chartstext.innerHTML = "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Old Charts ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"
+                    chartstext.style.margin = "10px 0px 10px 0px"
+                    chartstext.style.display = "block"
+                    chartstext.style.color = "lightblue"
+                    chartstext.classList.add('ChartsText')
+                    screen.appendChild(chartstext)
+                    */
+
+
+                    var chartstextimage = document.createElement('img')
+                    chartstextimage.src = "Oldcharts_text.png"
+                    chartstextimage.style.width = "100%"
+                    chartstextimage.style.margin = "12px 0px 10px 0px"
+                    chartstextimage.style.display = "block"
+                    screen.appendChild(chartstextimage)
+
+                    counter=counter+2
+                }
+            }
+
+            for (var p = 0; p < 5; p++)
+            {
+
+                var newChart = document.createElement('div')
+                newChart.classList.add('chart')
+
+                /*
+                if (data[counter][1] == "\"411Ψ892\"")
+                {
+                    newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/“411Ψ892”.png)"
+                }
+                else if (data[counter][1].startsWith("Sqlupp"))
+                {
+                    newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/Sqlupp.png)" //I give up
+                }
+                else
+                {
+                    newChart.style.background = "linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(img/" + data[counter][1]
+                    .replace(/ /g, "%20")
+                    .replace(/\(/g, "%28")
+                    .replace(/\)/g, "%29")
+                    .replace(/'/g, '%27')
+                    .replace(/:/g, '')
+                    .replace(/#/g, '%23')
+                    .replace(/\//g, '') 
+                    + ".png)"
+                }
+                */
+
+                newChart.style.background =  ("linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/cover/" + data[counter][9])
+                newChart.style.backgroundSize = "cover"
+                newChart.style.backgroundPosition = "center"
+                
+                var text = document.createElement('p')
+                text.classList.add('absoluteposition')
+
+                text.innerHTML = "#" + (counter + 1)
+                text.style.transform = "translate(5px, -6px)"
+                text.style.fontSize = "11px"
+                
+                newChart.appendChild(text)
+
+                if (!parseInt(data[counter][6]) > 0)
+                {
+                    newChart.style.background =  ("linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0)")
+                }
+                else
+                {
+                    //title
+                    text = document.createElement('p')
+                    text.classList.add('absoluteposition')
+
+                    text.innerHTML = truncateText(data[counter][1], 200, "16px Arial")
+
+                    
+                    text.style.transform = "translate(5px, 6px)"
+                    text.style.fontSize = "11px"
+                    
+                    newChart.appendChild(text)
+
+
+                    //type
+                    //text = document.createElement('img')
+                    text = document.createElement('p')
+                    text.classList.add('absoluteposition')
+
+                    if (data[counter][10] == "std")
+                    {
+                        //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-std.png"
+                        text.innerHTML="STD"
+                    }
+                    else
+                    {
+                        //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-dx.png"
+                        text.innerHTML="DX"
+                    }
+                    
+                    text.style.transform = "translate(5px, 20px)"
+                    //text.style.width = "40px"
+                    text.style.fontSize = "11px"
+                    newChart.appendChild(text)
+
+
+                    //accuracy
+                    text = document.createElement('p')
+                    text.classList.add('absoluteposition')
+
+                    text.innerHTML = data[counter][4]
+                    text.style.transform = "translate(4px, 48px)"
+                    text.style.fontSize = "12px"
+                    
+                    newChart.appendChild(text)
+
+
+                    //rank
+                    text = document.createElement('p')
+                    text.classList.add('absoluteposition')
+
+                    text.innerHTML = data[counter][5]
+                    text.style.transform = "translate(5px, 53px)"
+                    text.style.fontSize = "20px"
+                    
+                    newChart.appendChild(text)
+
+
+                    //internal diff
+                    text = document.createElement('p')
+                    text.classList.add('absoluteposition')
+
+                    /*
+                    for (var o = 0; o < songdata.split("\n").length; o++)
+                    {
+                        
+                        if (data[counter][3] == songdata.split("\n")[o].split("\t")[2])
+                        {
+                            if (songdata.split("\n")[o].split("\t")[3] % 1 == 0)
+                            {
+                                text.innerHTML = songdata.split("\n")[o].split("\t")[3] + ".0"
+                            }
+                            else
+                            {
+                                text.innerHTML = songdata.split("\n")[o].split("\t")[3]
+                            }
+                            
+                            console.log(songdata.split("\n")[o].split("\t")[3])
+                            o=songdata.split("\n").length
+                        }
+                        
+
+                    }
+                    */
+
+                    if (data[counter][3] % 1 == 0 && !(data[counter][3].includes(".0")))
+                    {
+                        text.innerHTML = data[counter][3] + ".0"
+                    }
+                    else
+                    {
+                        text.innerHTML = data[counter][3]
+                    }
+
+                    
+                    text.style.transform = "translate(118px, 42px)"
+                    text.style.fontSize = "13px"
+                    
+                    newChart.appendChild(text)
+
+
+                    //Rating
+                    text = document.createElement('p')
+                    text.classList.add('absoluteposition')
+
+                    text.innerHTML = data[counter][6]
+                    text.style.transform = "translate(103px, 43px)"
+                    text.style.fontSize = "26px"
+                    totalrating = totalrating + parseInt(data[counter][6])
+
+                    newChart.appendChild(text)
+
+
+                    //Difficulty
+                    text = document.createElement('div')
+                    text.classList.add('absoluteposition')
+                    text.classList.add('triangle')
+                    if (data[counter][2] == "BASIC")
+                    {
+                        text.style.borderColor = "rgb(46 189 99) rgb(46 189 99) transparent transparent"
+                    }
+                    else if (data[counter][2] == "ADVANCED")
+                    {
+                        text.style.borderColor = "rgb(248 159 54) rgb(248 159 54) transparent transparent"
+                    }
+                    else if (data[counter][2] == "EXPERT")
+                    {
+                        text.style.borderColor = "rgb(238 70 94) rgb(238 70 94) transparent transparent"
+                    }
+                    else if (data[counter][2] == "MASTER")
+                    {
+                        text.style.borderColor = "rgb(124 54 177) rgb(124 54 177) transparent transparent"
+                    }
+                    else if (data[counter][2] == "Re:MASTER")
+                    {
+                        text.style.borderColor = "rgb(204 133 255) rgb(204 133 255) transparent transparent"
+                    }
+                    else
+                    {
+                        text.style.borderColor = "transparent transparent transparent transparent"
+                    }
+
+                    text.style.transform = "translate(118px, 0px)"
+                    newChart.appendChild(text)
+
+
+                    //FC/AP
+                    if (getComputedStyle(document.getElementById("FCAPToggle")).getPropertyValue("font-family") == "checked")
+                    {
+                        text = document.createElement('img')
+                        text.classList.add('absoluteposition')
+                        if (data[counter][7] == "")
+                        {
+                            text.src = "Clear.png"
+                        }
+                        else
+                        {
+                            text.src = data[counter][7] + ".png"
+                        }
+
+                        text.style.width = "22px"
+
+
+                        if (!DXstarToggled())
+                        {
+                            text.style.transform = "translate(54px, 74px)"
+                        }
+                        else
+                        {
+                            text.style.transform = "translate(79px, 74px)"
+                        }
+                        newChart.appendChild(text)
+                    }
+
+                    //DX☆
+                    if (DXstarToggled() && parseInt(data[counter][8]) >= 0)
+                    {
+                        text = document.createElement('img')
+                        text.classList.add('absoluteposition')
+                        text.src = "DX" + data[counter][8] + ".png"
+                        text.style.width = "22px"
+                        text.style.transform = "translate(54px, 74px)"
+                        newChart.appendChild(text)
+                    }   
+                }
+
+                
+
+
+                newRow.appendChild(newChart)
+
+                counter++
+            }
+
+            screen.appendChild(newRow)
+        }
+        setrating(totalrating)
     }
-
-
-    document.getElementById("ratingdigit1").src= "monospace" + nthnumber(4,totalrating) + ".png"
-    document.getElementById("ratingdigit2").src= "monospace" + nthnumber(3,totalrating) + ".png"
-    document.getElementById("ratingdigit3").src= "monospace" + nthnumber(2,totalrating) + ".png"
-    document.getElementById("ratingdigit4").src= "monospace" + nthnumber(1,totalrating) + ".png"
-    document.getElementById("ratingdigit5").src= "monospace" + nthnumber(0,totalrating) + ".png"
-    document.getElementById("ratingDisplay").innerHTML = totalrating
     
 }
 
@@ -520,10 +1052,36 @@ async function fetchCredentials() {
 }
 
 
+function FCAPToggled ()
+{
+    if (getComputedStyle(document.getElementById("FCAPToggle")).getPropertyValue("font-family") == "checked")
+    {
+        return true
+    }
+    else
+    {
+        return false
+    }
+}
+
+function DXstarToggled ()
+{
+    if (getComputedStyle(document.getElementById("DXstarToggle")).getPropertyValue("font-family") == "checked")
+    {
+        return true
+    }
+    else
+    {
+        return false
+    }
+}
+
+
 
 var cdata = []
 var rawdata = []
 var data = []
+var tempratingdata=[]
 
 async function loadtsvAsText(){
 
@@ -569,7 +1127,17 @@ async function loadtsvAsText(){
     document.getElementById("main").style.display="block"
     document.getElementById("back_save").style.display= "flex"
 
-    rawdata = await fetchSheetAsTSV(document.getElementById("chartType").value)
+    if (document.getElementById("chartType").value.includes("Chart Constants"))
+    {
+        rawdata = await fetchSheetAsTSV("Master Table")
+        tempratingdata = await fetchSheetAsTSV("Best 50 Rating!M2:M2")
+        setrating(tempratingdata)
+    }
+    else
+    {
+        rawdata = await fetchSheetAsTSV(document.getElementById("chartType").value)
+    }
+
     console.log(rawdata)
     data = (rawdata.split("\n"))
 
@@ -581,6 +1149,7 @@ async function loadtsvAsText(){
         data.splice(0, 1)
 
         console.log(data)
+        
 
         //sort()
         generate()
@@ -750,6 +1319,46 @@ function nthnumber(ntn, number){
     return Math.floor((number/Math.pow(10,ntn))%10);    
 }
 
+
+function setrating (rating)
+{
+    if (rating >= 15000)
+    {
+        document.getElementById("rating_border").src="border 15k.png"
+    }
+    else if (rating >=14500)
+    {
+        document.getElementById("rating_border").src="border 14.5k.png"
+    }
+    else if (rating >=14000)
+    {
+        document.getElementById("rating_border").src="border 14k.png"
+    }
+    else if (rating >=13000)
+    {
+        document.getElementById("rating_border").src="border 13k.png"
+    }
+    else if (rating >=12000)
+    {
+        document.getElementById("rating_border").src="border 12k.png"
+    }
+    else if (rating >=10000)
+    {
+        document.getElementById("rating_border").src="border 10k.png"
+    }
+    else
+    {
+        document.getElementById("rating_border").src="border 7k.png"
+    }
+
+
+    document.getElementById("ratingdigit1").src= "monospace" + nthnumber(4,rating) + ".png"
+    document.getElementById("ratingdigit2").src= "monospace" + nthnumber(3,rating) + ".png"
+    document.getElementById("ratingdigit3").src= "monospace" + nthnumber(2,rating) + ".png"
+    document.getElementById("ratingdigit4").src= "monospace" + nthnumber(1,rating) + ".png"
+    document.getElementById("ratingdigit5").src= "monospace" + nthnumber(0,rating) + ".png"
+    document.getElementById("ratingDisplay").innerHTML = rating
+}
 
 
 document.getElementById("savebutton").addEventListener("click", tempmessage);
