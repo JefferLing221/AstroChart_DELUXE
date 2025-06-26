@@ -22,6 +22,38 @@ h3{
   border-width: 1px;
 }
 
+.constantchart{
+  width: 74px;
+  height: 100px;
+  background-color: black;
+  margin: 5.2px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  display: grid;
+  text-align: left;
+  background-size: cover;
+  background-position: center; 
+  border-color: white;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.constantchartheader{
+  width: 95px;
+  height: auto;
+  margin: 5px;
+  font-size: 40px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chartcontainer{
+  display: flex;
+  flex-direction: column;
+}
+
 .triangle {
   width: 0;
   height: 0;
@@ -217,7 +249,6 @@ h1{
 }
 
 
-
 #sheets_link{
   margin-top: 60px;
   margin-bottom: 20px;
@@ -342,6 +373,27 @@ option{
   font-family: Thicccboi;
   font-weight: 600;
   letter-spacing: 0.3px;
+}
+
+.medal{
+  grid-column: 1;
+  grid-row: 1;
+  height: 35px;
+}
+
+.medalrecord{
+  grid-column: 1;
+  grid-row: 1;
+  height: 25px;
+}
+
+.medaltext{
+  grid-column: 1;
+  grid-row: 1;
+  max-height: 20px;
+  max-width: 40px;
+  font-size: 18px;
+  text-align: left;
 }
 
 
