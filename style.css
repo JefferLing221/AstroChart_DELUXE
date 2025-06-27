@@ -297,7 +297,7 @@ option{
 }
 
 #username_rating{
-  display: block;
+  display: grid;
   margin-left: 10px;
   text-align: left;
 }
@@ -306,13 +306,16 @@ option{
   font-size: 35px;
   margin-left: 10px;
   margin-bottom: 5px;
+  grid-column: 1;
+  grid-row: 1;
+  position: absolute;
 }
 
 #rating_border{
   width: 250px;
   height: auto;
   position: absolute;
-  transform: translate(0px,11px);
+  transform: translate(0px,52.5px);
 }
 
 .ratingdigit {
@@ -321,11 +324,11 @@ option{
   z-index: 999;
 }
 
-#ratingdigit1{ transform: translate(120.1px, 29.8px); }
-#ratingdigit2{ transform: translate(139.5px, 29.8px); }
-#ratingdigit3{ transform: translate(158.9px, 29.8px); }
-#ratingdigit4{ transform: translate(178.3px, 29.8px); }
-#ratingdigit5{ transform: translate(197.7px, 29.8px); }
+#ratingdigit1{ transform: translate(120.1px, 71.3px); }
+#ratingdigit2{ transform: translate(139.5px, 71.3px); }
+#ratingdigit3{ transform: translate(158.9px, 71.3px); }
+#ratingdigit4{ transform: translate(178.3px, 71.3px); }
+#ratingdigit5{ transform: translate(197.7px, 71.3px); }
 
 
 
