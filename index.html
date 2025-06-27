@@ -1498,7 +1498,14 @@ window.addEventListener('load', async () => {
                 else if (e % 4 == 2)
                 {
                     //difficulty
-                    data[num].splice(2,1,urldata[e])
+                    if (urldata[e] == "remaster")
+                    {
+                        data[num].splice(2,1,"Re:MASTER")
+                    }
+                    else
+                    {
+                        data[num].splice(2,1,urldata[e].toUpperCase())
+                    }
                     tempdifficulty = urldata[e]
                 }
                 else if (e % 4 == 3)
