@@ -238,7 +238,10 @@ function generate ()
                     }
                     else
                     {
-                        totalRankData[11]++
+                        if (data[counter][7] != "-")
+                        {
+                            totalRankData[11]++
+                        }
                     }
 
                     //DX☆ data
@@ -596,7 +599,10 @@ function generate ()
                             img.classList.add('absoluteposition')
                             if (data[groupContents[i][counter]][5] == "")
                             {
-                                img.src = "Clear.png"
+                                if (data[groupContents[i][counter]][4] != "")
+                                {
+                                    img.src = "Clear.png"
+                                }
                             }
                             else
                             {
@@ -962,7 +968,7 @@ function generate ()
                     {
                         text = document.createElement('img')
                         text.classList.add('absoluteposition')
-                        if (data[counter][7] == "")
+                        if (data[counter][7] == "") 
                         {
                             text.src = "Clear.png"
                         }
