@@ -145,9 +145,6 @@ function generate ()
         screen.removeChild(child);
     }
 
-    console.log(document.getElementById("chartType").value)
-    console.log(document.getElementById("chartType").value.includes("Chart Constants"))
-
 
     if (document.getElementById("chartType").value.includes("Chart Constants"))
     {
@@ -795,7 +792,15 @@ function generate ()
                 var text = document.createElement('p')
                 text.classList.add('absoluteposition')
 
-                text.innerHTML = "#" + (counter + 1)
+                if (document.getElementById("chartType").value == "DX Rating" && counter > 16)
+                {
+                    text.innerHTML = "#" + (counter - 16)
+                }
+                else
+                {
+                    text.innerHTML = "#" + (counter + 1)
+                }
+
                 text.style.transform = "translate(5px, -6px)"
                 text.style.fontSize = "11px"
                 
@@ -825,15 +830,15 @@ function generate ()
                     text = document.createElement('p')
                     text.classList.add('absoluteposition')
 
-                    if (data[counter][10] == "std")
+                    if (data[counter][10] == "dx")
                     {
                         //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-std.png"
-                        text.innerHTML="STD"
+                        text.innerHTML="DX"
                     }
                     else
                     {
                         //text.src="https://dp4p6x0xfi5o9.cloudfront.net/maimai/img/type-dx.png"
-                        text.innerHTML="DX"
+                        text.innerHTML="STD"
                     }
                     
                     text.style.transform = "translate(5px, 20px)"
@@ -1371,6 +1376,287 @@ function tempmessage  ()
       alert("Please install the screenshot extension to use the 'Save Chart' feature using the link in the sheets.\nFor mobile users, you can screenshot the page")
     }
 }
+
+var urldata = []
+function decodeDataFromUrl() {
+    const hash = window.location.hash;
+    const match = hash.match(/#data=(.+)/);
+    if (match) {
+      try {
+        const decoded = decodeURIComponent(match[1]);
+        urldata = decoded
+        return (decoded)
+      } catch (e) {
+        console.error('Failed to decode data:', e);
+      }
+    }
+    return false
+}
+
+window.addEventListener('load', async () => {
+    try {
+        
+        if (decodeDataFromUrl() != false)
+        {
+            await getData()
+
+            console.log(maimaiData)
+            console.log(urldata)
+
+            urldata=urldata.split(",")
+
+            document.getElementById("optionalImage").style.display="none"
+            document.getElementById("pfp").src=urldata[0]
+            document.getElementById("username").innerHTML=urldata[1]
+
+            //setrating(urldata[2])
+
+            document.getElementById("login").style.display="none"
+            document.getElementById("main").style.display="block"
+            document.getElementById("back_save").style.display= "flex"
+
+            document.getElementById("chartType").value = "DX Rating"
+
+            urldata.splice(0, 2)
+
+            for (var e = 0; e < 52; e++)
+            {
+                data.push([
+                    "","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+                    ])
+            }
+
+            var num = 0
+            var temptitle = "" 
+            var tempaccuracy = ""
+            var tempratingmultiplier = ""
+            var tempdifficulty = "" 
+            var temptype = ""
+
+
+            for (var e = 0; e < urldata.length; e++)
+            {
+
+                num = Math.floor(e/4)
+
+                if (e % 4 == 0)
+                {
+                    //title
+                    data[num].splice(1,1,urldata[e]) 
+                    temptitle = urldata[e]
+                }
+                else if (e % 4 == 1)
+                {
+                    //accuracy
+                    data[num].splice(3,1,urldata[e])
+                    tempaccuracy = urldata[e].split("%")[0]
+
+
+                    if (num < 50)
+                    {
+                        
+                        if (parseFloat(urldata[e].split("%")[0]) >= 100.5)
+                        {
+                            data[num].splice(4,1,"SSS+")
+                            tempratingmultiplier = 22.4
+                        }
+                        else if (parseFloat(urldata[e].split("%")[0]) >= 100)
+                        {
+                            data[num].splice(4,1,"SSS")
+                            tempratingmultiplier = 21.6
+                        }
+                        else if (parseFloat(urldata[e].split("%")[0]) >= 99.5)
+                        {
+                            data[num].splice(4,1,"SS+")
+                            tempratingmultiplier = 21.1
+                        }
+                        else if (parseFloat(urldata[e].split("%")[0]) >= 99)
+                        {
+                            data[num].splice(4,1,"SS")
+                            tempratingmultiplier = 20.8
+                        }
+                        else if (parseFloat(urldata[e].split("%")[0]) >= 98)
+                        {
+                            data[num].splice(4,1,"S+")
+                            tempratingmultiplier = 20.3
+                        }
+                        else if (parseFloat(urldata[e].split("%")[0]) >= 97)
+                        {
+                            data[num].splice(4,1,"S")
+                            tempratingmultiplier = 20
+                        }
+                    }
+
+
+                }
+                else if (e % 4 == 2)
+                {
+                    //difficulty
+                    data[num].splice(2,1,urldata[e])
+                    tempdifficulty = urldata[e]
+                }
+                else if (e % 4 == 3)
+                {
+                    //type
+                    data[num].splice(9,1,urldata[e])
+
+                    if (urldata[e] == "standard")
+                    {
+                        temptype = 'std'
+                    }
+                    else
+                    {
+                        temptype = urldata[e]
+                    }
+
+                    
+
+
+                    
+                    for (var p = 0; p < maimaiData[0].length; p++)
+                    {
+                        /*
+                        title    0
+                        img      1
+                        diff     2
+                        type     3
+                        constant 4
+                        etc
+                        */
+
+                    
+                        if (maimaiData[0][p] == temptitle && maimaiData[2][p] == tempdifficulty && maimaiData[3][p] == temptype)
+                        {
+                            data[num].splice(3,0,maimaiData[4][p].toString())
+                            data[num].splice(8,0,(maimaiData[1][p] + ".png"))
+
+                    
+                            if (tempaccuracy > 100.5)
+                            {
+                                tempaccuracy = 100.5
+                            }
+                            data[num].splice(6,0, Math.floor(tempaccuracy/100 * tempratingmultiplier * maimaiData[4][p] ))
+                        }
+
+                        
+                    }
+
+                    
+                }
+            }
+
+            data.splice(15,0,"","")
+            data[3].splice(14,0,"PRiSM")
+
+            console.log(data)
+            generate()
+        }
+    }
+    catch (error) {
+    console.error('Error during load:', error);
+    }
+})
+
+
+
+
+
+
+//thanks ChatGPT, again
+function extractMaimaiData(jsonData, version = "PRiSM") {
+
+
+
+  const songIds = [];
+  const imageNames = [];
+  const difficulties = [];
+  const types = [];
+  const levelValues = [];
+  const regionIntl = [];
+  const regionOverrides = [];
+  const versions = [];
+
+  jsonData.songs.forEach(song => {
+    song.sheets.forEach(sheet => {
+      songIds.push(song.songId);
+      imageNames.push(song.imageName);
+      difficulties.push(sheet.difficulty);
+      types.push(sheet.type);
+
+      // Use multiverInternalLevelValue[version] if exists, fallback to internalLevelValue
+      const versionValue = sheet.multiverInternalLevelValue?.[version];
+      levelValues.push(versionValue ?? sheet.internalLevelValue);
+
+      // Region intl availability
+      regionIntl.push(sheet.regions.intl ?? false);
+
+      // Region override for intl (null if not found)
+      regionOverrides.push(sheet.regionOverrides?.intl ?? null);
+
+      versions.push(sheet.version);
+    });
+  });
+
+  return [
+    songIds,
+    imageNames,
+    difficulties,
+    types,
+    levelValues,
+    regionIntl,
+    regionOverrides,
+    versions
+  ];
+}
+
+
+var maimaiJson = ""
+var maimaiData = []
+var tempversion = ""
+
+async function getData() {
+      const url = 'https://raw.githubusercontent.com/gekichumai/dxrating/refs/heads/main/packages/dxdata/dxdata.json'; // Replace with your actual JSON URL
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        maimaiJson = await response.json();
+        //console.log(maimaiJson)
+
+        const result = extractMaimaiData((maimaiJson), "PRiSM");
+
+        //version correction
+        //idk if this even works
+        for (var z = result[0].length; z > 0; z--)
+        {
+
+            if (result[5][z] == true)
+            {
+                if (result[6][z].version != undefined)
+                {
+                    console.log(result[6][z].version) //version override  
+                    maimaiData = extractMaimaiData((maimaiJson), result[6][z].version)
+                }
+                else
+                {
+                    console.log(result[7][z]) //version  
+                    maimaiData = extractMaimaiData((maimaiJson), result[7][z])
+                }
+                z=0
+            }
+        }   
+
+
+      } catch (error) {
+        console.error('Error fetching JSON:', error);
+      }
+    }
+
+/*
+
+
 
 
 
