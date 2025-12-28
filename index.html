@@ -1,9 +1,12 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>AstroChart</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <link rel="stylesheet" href="style.css">
+
+
 <body>
 
 <div class="centered" id="login">
@@ -1384,6 +1387,7 @@ function tempmessage  ()
 }
 
 var urldata = []
+var versionToDisplay = ""
 function decodeDataFromUrl() {
     const hash = window.location.hash;
     const match = hash.match(/#data=(.+)/);
@@ -1404,7 +1408,7 @@ window.addEventListener('load', async () => {
         
         if (decodeDataFromUrl() != false)
         {
-            await getData()
+            await getData("PRiSM PLUS")
 
             console.log(maimaiData)
             console.log(urldata)
@@ -1442,6 +1446,7 @@ window.addEventListener('load', async () => {
 
             for (var e = 0; e < urldata.length; e++)
             {
+
 
                 num = Math.floor(e/4)
 
@@ -1529,17 +1534,38 @@ window.addEventListener('load', async () => {
                     for (var p = 0; p < maimaiData[0].length; p++)
                     {
                         /*
-                        title    0
-                        img      1
-                        diff     2
-                        type     3
-                        constant 4
+                        title      0
+                        img        1
+                        diff       2
+                        type       3
+                        constant   4
+                        regionintl 5
+                        regionovrd 6
+                        versions   7
                         etc
                         */
 
                     
                         if (maimaiData[0][p] == temptitle && maimaiData[2][p] == tempdifficulty && maimaiData[3][p] == temptype)
                         {
+                            
+                            if (e == 3)
+                            {
+                                if (maimaiData[6][p] != null)
+                                {
+                                    await getData(maimaiData[6][p].toString())
+                                    console.log("version = " + maimaiData[6][p])
+                                    versionToDisplay = maimaiData[6][p].toString()
+                                }
+                                else
+                                {
+                                    await getData(maimaiData[7][p].toString())   
+                                    console.log("version = " +  maimaiData[7][p])
+                                    versionToDisplay = maimaiData[7][p].toString()
+                                }
+                            }
+                            
+
                             data[num].splice(3,0,maimaiData[4][p].toString())
                             data[num].splice(8,0,(maimaiData[1][p] + ".png"))
 
@@ -1559,7 +1585,7 @@ window.addEventListener('load', async () => {
             }
 
             data.splice(15,0,"","")
-            data[3].splice(14,0,"PRiSM")
+            data[3].splice(14,0,versionToDisplay)
 
             console.log(data)
             generate()
@@ -1576,7 +1602,7 @@ window.addEventListener('load', async () => {
 
 
 //thanks ChatGPT, again
-function extractMaimaiData(jsonData, version = "PRiSM") {
+function extractMaimaiData(jsonData, version = "PRiSM PLUS") {
 
 
 
@@ -1604,7 +1630,7 @@ function extractMaimaiData(jsonData, version = "PRiSM") {
       regionIntl.push(sheet.regions.intl ?? false);
 
       // Region override for intl (null if not found)
-      regionOverrides.push(sheet.regionOverrides?.intl ?? null);
+      regionOverrides.push(sheet.regionOverrides?.intl.version ?? null);
 
       versions.push(sheet.version);
     });
@@ -1627,7 +1653,7 @@ var maimaiJson = ""
 var maimaiData = []
 var tempversion = ""
 
-async function getData() {
+async function getData(ver = "PRiSM PLUS") {
       const url = 'https://raw.githubusercontent.com/gekichumai/dxrating/refs/heads/main/packages/dxdata/dxdata.json'; // Replace with your actual JSON URL
       try {
         const response = await fetch(url);
@@ -1638,8 +1664,10 @@ async function getData() {
         maimaiJson = await response.json();
         //console.log(maimaiJson)
 
-        const result = extractMaimaiData((maimaiJson), "PRiSM");
+        const result = extractMaimaiData((maimaiJson), ver);
 
+        maimaiData = result
+        /*
         //version correction
         //idk if this even works
         for (var z = result[0].length; z > 0; z--)
@@ -1655,11 +1683,13 @@ async function getData() {
                 else
                 {
                     console.log(result[7][z]) //version  
+                    console.log(result[0][z])
                     maimaiData = extractMaimaiData((maimaiJson), result[7][z])
                 }
                 z=0
             }
-        }   
+        }
+        */   
 
 
       } catch (error) {
